@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Hj&#228;lpsida f&#246;r API</title>
+    
+</head>
+<body>
+    
+
+<link type="text/css" href="/nv0101/v1/sokpavar/Areas/HelpPage/Content/HelpPage.css" rel="stylesheet" />
+<header class="help-page">
+    <div class="content-wrapper">
+        <div class="float-left">
+            <h1>Hj&#228;lpsida f&#246;r API</h1>
+        </div>
+    </div>
+</header>
+<div id="body" class="help-page">
+    <section class="featured">
+        <div class="content-wrapper">
+            <h2>Introduction</h2>
+
+                <p>
+                    SokPaVar API för hämtning av arbetsställen och företag.<br />
+                    Först hämtas kodtabeller och kategorier. Dessa används för att bygga anrop för att hämta uppgifter om arbetsställen eller företag.<br />
+                    Exempel på anrop:<br /><a href="/nv0101/v1/sokpavar/help/exampleAe">Förslag på JSON-anrop för arbetsställen</a>
+                </p>
+                <p>
+                    <a href="/nv0101/v1/sokpavar/help/exampleJe">Förslag på JSON-anrop för företag</a>
+                </p>
+                <p>
+                    För fler exempel och XML-exempel se dokumentet <i>Arbeta_med _Kategorier_och_Variabler_i_APIet.docx</i>
+                </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+
+
+<h2 id="Ae">Ae</h2>
+
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Ae-KategorierMedKodtabeller">GET api/Ae/KategorierMedKodtabeller</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla kategorier med kodtabeller som finns.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Ae-KoptaKategorier">GET api/Ae/KoptaKategorier</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla kategorier som inloggad kund har k&#246;pt eller har tillg&#229;ng till.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-Kodtabell">POST api/Ae/Kodtabell</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar kodtabell f&#246;r en viss angiven kategori.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Ae-Variabler">GET api/Ae/Variabler</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla AE variabler som finns.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Ae-KoptaVariabler">GET api/Ae/KoptaVariabler</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla variabler som inloggad kund har k&#246;pt eller har tillg&#229;ng till.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-RaknaArbetsstallen">POST api/Ae/RaknaArbetsstallen</a></td>
+                    <td class="api-documentation">
+
+                            <p>R&#228;kna antal arbetsst&#228;llen</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-HamtaArbetsstallen">POST api/Ae/HamtaArbetsstallen</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mta information om arbetsst&#228;llen.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-HamtaArbetsstallenXML">POST api/Ae/HamtaArbetsstallenXML</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mta information om arbetsst&#228;llen (variabel v&#228;rde) som XML eller JSON.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-HamtaFirmor">POST api/Ae/HamtaFirmor</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mta information om firmor.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Ae-HamtaFirmorXML">POST api/Ae/HamtaFirmorXML</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mta information om firmor (variabel v&#228;rde) som XML eller JSON.</p>
+                    </td>
+                </tr>
+    </tbody>
+</table>
+
+<h2 id="Common">Common</h2>
+
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Common-KontrollTyper">GET api/Common/KontrollTyper</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla kontrolltyper med beskrivningar.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Common-TGGrupper">GET api/Common/TGGrupper</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla till&#228;ggsgrupper med beskrivningar.</p>
+                    </td>
+                </tr>
+    </tbody>
+</table>
+
+<h2 id="Je">Je</h2>
+
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Je-KategorierMedKodtabeller">GET api/Je/KategorierMedKodtabeller</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla kategorier med kodtabeller som finns.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Je-KoptaKategorier">GET api/Je/KoptaKategorier</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla kategorier som inloggad kund har k&#246;pt eller har tillg&#229;ng till.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-Kodtabell">POST api/Je/Kodtabell</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar kodtabell f&#246;r en viss angiven kategori.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Je-Variabler">GET api/Je/Variabler</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla JE variabler som finns.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/GET-api-Je-KoptaVariabler">GET api/Je/KoptaVariabler</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar alla variabler som inloggad kund har k&#246;pt eller har tillg&#229;ng till.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-RaknaForetag">POST api/Je/RaknaForetag</a></td>
+                    <td class="api-documentation">
+
+                            <p>R&#228;knar antal f&#246;retag.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-HamtaForetag">POST api/Je/HamtaForetag</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar information om f&#246;retag.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-HamtaForetagXML">POST api/Je/HamtaForetagXML</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar information om f&#246;retag (variabel v&#228;rde) som XML eller JSON.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-HamtaFirmor">POST api/Je/HamtaFirmor</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar information om firmor.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name"><a href="/nv0101/v1/sokpavar/Help/Api/POST-api-Je-HamtaFirmorXML">POST api/Je/HamtaFirmorXML</a></td>
+                    <td class="api-documentation">
+
+                            <p>H&#228;mtar information om firmor (variabel v&#228;rde) som XML eller JSON.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="api-name">GET api/Je/SektorFil</td>
+                    <td class="api-documentation">
+                        <p><b>För aktuell kund är inte metoden tillgänglig.</b></p>
+                    </td>
+                </tr>
+    </tbody>
+</table>    </section>
+</div>
+
+</body>
+</html>
