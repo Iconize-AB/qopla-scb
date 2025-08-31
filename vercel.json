@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
+  ],
+  "env": {
+    "SCB_CERT_PASSWORD": "@scb_cert_password",
+    "SCB_CERT_BASE64": "@scb_cert_base64"
+  }
+}

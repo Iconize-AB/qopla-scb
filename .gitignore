@@ -4,6 +4,9 @@
 # Certificate files
 *.pfx
 
+# Certificate encoding script (temporary)
+encode-certificate.js
+
 # Node modules
 node_modules/
 

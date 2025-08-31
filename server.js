@@ -13,12 +13,22 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Certificate configuration
-const certificatePath = './Certifikat_SokPaVar_A00364_2025-08-28 10-43-58Z.pfx';
 const certificatePassword = process.env.SCB_CERT_PASSWORD;
+let certificateBuffer;
+
+// Handle certificate for both local development and Vercel deployment
+if (process.env.SCB_CERT_BASE64) {
+    // For Vercel: use base64 encoded certificate from environment variable
+    certificateBuffer = Buffer.from(process.env.SCB_CERT_BASE64, 'base64');
+} else {
+    // For local development: read from file
+    const certificatePath = './Certifikat_SokPaVar_A00364_2025-08-28 10-43-58Z.pfx';
+    certificateBuffer = fs.readFileSync(certificatePath);
+}
 
 // HTTPS agent with certificate
 const httpsAgent = new https.Agent({
-    pfx: fs.readFileSync(certificatePath),
+    pfx: certificateBuffer,
     passphrase: certificatePassword,
     rejectUnauthorized: true
 });
@@ -374,9 +384,14 @@ app.get('/api/help/exampleAe', async (req, res) => {
     }
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`API ID: A00364`);
-    console.log(`Certificate: ${certificatePath}`);
-});
+// Export for Vercel
+module.exports = app;
+
+// Start server only if not in Vercel environment
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+        console.log(`API ID: A00364`);
+        console.log(`Certificate: ${certificatePath}`);
+    });
+}
