@@ -120,7 +120,7 @@ app.get('/api/employee-counts', async (req, res) => {
 // Search for restaurants
 app.post('/api/search-restaurants', async (req, res) => {
     try {
-        const { region, city, employeeCount, maxResults = 2000 } = req.body;
+        const { city, employeeCount, maxResults = 2000 } = req.body;
         
         const searchQuery = {
             Kategorier: [
@@ -136,14 +136,6 @@ app.post('/api/search-restaurants', async (req, res) => {
             ],
             MaxAntal: maxResults
         };
-
-        // Add region filter if specified
-        if (region && region !== 'all') {
-            searchQuery.Kategorier.push({
-                Kategori: "ARegion",
-                Kod: [region]
-            });
-        }
 
         // Add city filter if specified
         if (city && city !== 'all') {
@@ -189,7 +181,7 @@ app.post('/api/search-restaurants', async (req, res) => {
 // Download restaurants to Excel
 app.post('/api/download-excel', async (req, res) => {
     try {
-        const { region, city, employeeCount, maxResults = 2000 } = req.body;
+        const { city, employeeCount, maxResults = 2000 } = req.body;
         
         const searchQuery = {
             Kategorier: [
@@ -205,14 +197,6 @@ app.post('/api/download-excel', async (req, res) => {
             ],
             MaxAntal: maxResults
         };
-
-        // Add region filter if specified
-        if (region && region !== 'all') {
-            searchQuery.Kategorier.push({
-                Kategori: "ARegion",
-                Kod: [region]
-            });
-        }
 
         // Add city filter if specified
         if (city && city !== 'all') {
@@ -288,12 +272,6 @@ app.post('/api/download-excel', async (req, res) => {
 
             // Generate filename based on filters
             let filename = 'restauranger';
-            if (region && region !== 'all') {
-                const regionData = await makeApiRequest('/api/ae/kategoriermedkodtabeller');
-                const regions = regionData.data.find(cat => cat.Id_Kategori_AE === 'ARegion');
-                const regionName = regions?.VardeLista.find(r => r.Varde === region)?.Text || region;
-                filename += `_${regionName.replace(/[^a-zA-Z0-9]/g, '')}`;
-            }
             if (city && city !== 'all') {
                 const cityData = await makeApiRequest('/api/ae/kategoriermedkodtabeller');
                 const cities = cityData.data.find(cat => cat.Id_Kategori_AE === 'Kommun');
@@ -328,22 +306,7 @@ app.post('/api/download-excel', async (req, res) => {
     }
 });
 
-// Get regions (counties)
-app.get('/api/regions', async (req, res) => {
-    try {
-        const response = await makeApiRequest('/api/ae/kategoriermedkodtabeller');
-        const regions = response.data.find(cat => cat.Id_Kategori_AE === 'Län');
-        
-        if (regions) {
-            res.json(regions.VardeLista);
-        } else {
-            res.json([]);
-        }
-    } catch (error) {
-        console.error('Error fetching regions:', error);
-        res.status(500).json({ error: 'Failed to fetch regions' });
-    }
-});
+
 
 // Get municipalities
 app.get('/api/municipalities', async (req, res) => {
@@ -392,6 +355,5 @@ if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
         console.log(`API ID: A00364`);
-        console.log(`Certificate: ${certificatePath}`);
     });
 }

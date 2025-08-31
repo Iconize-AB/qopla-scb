@@ -1,11 +1,9 @@
 // Global variables
-let regions = [];
 let cities = [];
 let employeeCounts = [];
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    loadRegions();
     loadCities();
     loadEmployeeCounts();
     setupEventListeners();
@@ -20,19 +18,7 @@ function setupEventListeners() {
     downloadExcelBtn.addEventListener('click', handleExcelDownload);
 }
 
-// Load regions from API
-async function loadRegions() {
-    try {
-        const response = await fetch('/api/regions');
-        if (!response.ok) throw new Error('Failed to load regions');
-        
-        regions = await response.json();
-        populateRegionSelect(regions);
-    } catch (error) {
-        console.error('Error loading regions:', error);
-        showError('Failed to load regions. Please refresh the page.');
-    }
-}
+
 
 // Load cities from API
 async function loadCities() {
@@ -62,17 +48,7 @@ async function loadEmployeeCounts() {
     }
 }
 
-// Populate region select dropdown
-function populateRegionSelect(regions) {
-    const select = document.getElementById('region');
-    
-    regions.forEach(region => {
-        const option = document.createElement('option');
-        option.value = region.Varde;
-        option.textContent = region.Text;
-        select.appendChild(option);
-    });
-}
+
 
 // Populate city select dropdown
 function populateCitySelect(cities) {
@@ -106,7 +82,6 @@ async function handleSearch(event) {
     
     const formData = new FormData(event.target);
     const searchData = {
-        region: formData.get('region'),
         city: formData.get('city'),
         employeeCount: formData.get('employeeCount'),
         maxResults: parseInt(formData.get('maxResults')) || 100
@@ -152,9 +127,6 @@ function displayResults(restaurants, searchData) {
     
     // Update stats
     document.getElementById('totalResults').textContent = restaurants.length;
-    document.getElementById('selectedRegion').textContent = 
-        searchData.region === 'all' ? 'All' : 
-        regions.find(r => r.Varde === searchData.region)?.Text || searchData.region;
     document.getElementById('selectedCity').textContent = 
         searchData.city === 'all' ? 'All' : 
         cities.find(c => c.Varde === searchData.city)?.Text || searchData.city;
@@ -167,11 +139,10 @@ function displayResults(restaurants, searchData) {
     
     if (restaurants.length === 0) {
         resultsList.innerHTML = `
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle me-2"></i>
-                    No restaurants found matching your criteria.
-                </div>
+            <div class="text-center py-5">
+                <i class="fas fa-info-circle" style="font-size: 3rem; color: var(--qopla-light-gray); margin-bottom: 1rem;"></i>
+                <h4 style="color: var(--qopla-dark-gray);">No restaurants found</h4>
+                <p style="color: var(--qopla-light-gray);">No restaurants found matching your criteria.</p>
             </div>
         `;
         // Hide Excel button if no results
@@ -200,8 +171,8 @@ function displayResults(restaurants, searchData) {
 
 // Create restaurant card
 function createRestaurantCard(restaurant) {
-    const col = document.createElement('div');
-    col.className = 'col-md-6 col-lg-4';
+    const card = document.createElement('div');
+    card.className = 'restaurant-card';
     
     // Extract restaurant information from SCB API response
     const name = restaurant.Företagsnamn || restaurant.Benämning || 'Unknown Name';
@@ -222,82 +193,68 @@ function createRestaurantCard(restaurant) {
     // Get employee count text
     const employeeText = employeeCounts.find(e => e.Varde === employees)?.Text || employees;
     
-    // Get region text
-    const regionText = regions.find(r => r.Varde === region)?.Text || region;
-    
-    // Create contact info section
-    let contactInfo = '';
-    if (phone || email) {
-        contactInfo = `
-            <div class="mb-2">
-                <i class="fas fa-phone text-muted me-2"></i>
-                <small class="text-muted">${phone || 'No phone'}</small>
+    card.innerHTML = `
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <h4 class="restaurant-title">
+                <i class="fas fa-utensils me-2"></i>${name}
+            </h4>
+            <span class="badge">${employeeText}</span>
+        </div>
+        
+        ${businessName ? `
+            <div class="mb-3">
+                <div class="detail-item">
+                    <div class="detail-label">Business Name</div>
+                    <div class="detail-value">${businessName}</div>
+                </div>
             </div>
-            <div class="mb-2">
-                <i class="fas fa-envelope text-muted me-2"></i>
-                <small class="text-muted">${email || 'No email'}</small>
-            </div>
-        `;
-    }
-    
-    col.innerHTML = `
-        <div class="restaurant-card p-3 h-100">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title mb-0 text-primary">
-                    <i class="fas fa-utensils me-2"></i>${name}
-                </h5>
-                <span class="badge bg-success">${employeeText}</span>
+        ` : ''}
+        
+        <div class="restaurant-details">
+            <div class="detail-item">
+                <div class="detail-label">Address</div>
+                <div class="detail-value">${address}<br>${postalCode} ${city}</div>
             </div>
             
-            ${businessName ? `
-                <div class="mb-2">
-                    <i class="fas fa-store text-muted me-2"></i>
-                    <small class="text-muted fst-italic">${businessName}</small>
-                </div>
-            ` : ''}
-            
-            <div class="card-body p-0">
-                <div class="mb-2">
-                    <i class="fas fa-map-marker-alt text-muted me-2"></i>
-                    <small class="text-muted">
-                        ${address}<br>
-                        ${postalCode} ${city}
-                    </small>
-                </div>
-                
-                <div class="mb-2">
-                    <i class="fas fa-building text-muted me-2"></i>
-                    <small class="text-muted">${municipality}, ${regionText}</small>
-                </div>
-                
-                <div class="mb-2">
-                    <i class="fas fa-tag text-muted me-2"></i>
-                    <small class="text-muted">${businessCode} (${businessCodeValue})</small>
-                </div>
-                
-                <div class="mb-2">
-                    <i class="fas fa-check-circle text-muted me-2"></i>
-                    <small class="text-muted">${status}</small>
-                </div>
-                
-                ${contactInfo}
-                
-                <hr class="my-2">
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">
-                        <i class="fas fa-id-card me-1"></i>
-                        Org: ${orgNumber}
-                    </small>
-                    <button class="btn btn-sm btn-outline-primary" onclick="showRestaurantDetails('${orgNumber}')">
-                        <i class="fas fa-info-circle me-1"></i>Details
-                    </button>
-                </div>
+            <div class="detail-item">
+                <div class="detail-label">Location</div>
+                <div class="detail-value">${municipality}</div>
             </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Business Code</div>
+                <div class="detail-value">${businessCode} (${businessCodeValue})</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Status</div>
+                <div class="detail-value">${status}</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Phone</div>
+                <div class="detail-value">${phone || 'Not available'}</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Email</div>
+                <div class="detail-value">${email || 'Not available'}</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Organization Number</div>
+                <div class="detail-value">${orgNumber}</div>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <button class="btn btn-primary btn-sm" onclick="showRestaurantDetails('${orgNumber}')">
+                <i class="fas fa-info-circle me-1"></i>View Details
+            </button>
         </div>
     `;
     
-    return col;
+    return card;
 }
 
 // Show restaurant details
