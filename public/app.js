@@ -1,11 +1,13 @@
 // Global variables
 let cities = [];
 let employeeCounts = [];
+let branchCodes = [];
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     loadCities();
     loadEmployeeCounts();
+    loadBranchCodes();
     setupEventListeners();
 });
 
@@ -48,6 +50,20 @@ async function loadEmployeeCounts() {
     }
 }
 
+// Load branch codes from API
+async function loadBranchCodes() {
+    try {
+        const response = await fetch('/api/branch-codes');
+        if (!response.ok) throw new Error('Failed to load branch codes');
+        
+        branchCodes = await response.json();
+        populateBranchCodesSelect(branchCodes);
+    } catch (error) {
+        console.error('Error loading branch codes:', error);
+        showError('Failed to load branch codes. Please refresh the page.');
+    }
+}
+
 
 
 // Populate city select dropdown
@@ -76,14 +92,35 @@ function populateEmployeeCountSelect(employeeCounts) {
     });
 }
 
+// Populate branch codes select dropdown
+function populateBranchCodesSelect(branchCodes) {
+    const branchCodesSelect = document.getElementById('branchCodes');
+    branchCodesSelect.innerHTML = '<option value="all" selected>All Branch Codes</option>';
+    
+    branchCodes.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code.Varde;
+        option.textContent = `${code.Varde} - ${code.Text}`;
+        branchCodesSelect.appendChild(option);
+    });
+}
+
 // Handle search form submission
 async function handleSearch(event) {
     event.preventDefault();
     
     const formData = new FormData(event.target);
+    
+    // Get selected branch codes
+    const branchCodesSelect = document.getElementById('branchCodes');
+    const selectedBranchCodes = Array.from(branchCodesSelect.selectedOptions)
+        .map(option => option.value)
+        .filter(value => value !== 'all');
+    
     const searchData = {
         city: formData.get('city'),
         employeeCount: formData.get('employeeCount'),
+        branchCodes: selectedBranchCodes,
         maxResults: parseInt(formData.get('maxResults')) || 100
     };
     
@@ -124,6 +161,7 @@ function displayResults(restaurants, searchData) {
     
     // Store current restaurants globally for details function
     window.currentRestaurants = restaurants;
+    window.currentSearchData = searchData;
     
     // Update stats
     document.getElementById('totalResults').textContent = restaurants.length;
@@ -133,6 +171,17 @@ function displayResults(restaurants, searchData) {
     document.getElementById('selectedSize').textContent = 
         searchData.employeeCount === 'all' ? 'All' : 
         employeeCounts.find(e => e.Varde === searchData.employeeCount)?.Text || searchData.employeeCount;
+    
+    // Update branch codes display
+    if (searchData.branchCodes && searchData.branchCodes.length > 0) {
+        const branchCodeTexts = searchData.branchCodes.map(code => {
+            const branchCode = branchCodes.find(b => b.Varde === code);
+            return branchCode ? `${code} - ${branchCode.Text}` : code;
+        });
+        document.getElementById('selectedBranchCodes').textContent = branchCodeTexts.join(', ');
+    } else {
+        document.getElementById('selectedBranchCodes').textContent = 'All';
+    }
     
     // Clear previous results
     resultsList.innerHTML = '';
@@ -357,11 +406,17 @@ async function handleExcelDownload() {
         downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Downloading...';
         downloadBtn.disabled = true;
 
+        // Get selected branch codes
+        const branchCodesSelect = document.getElementById('branchCodes');
+        const selectedBranchCodes = Array.from(branchCodesSelect.selectedOptions)
+            .map(option => option.value)
+            .filter(value => value !== 'all');
+        
         // Prepare download data
         const downloadData = {
-            region: window.currentSearchData.region,
             city: window.currentSearchData.city,
             employeeCount: window.currentSearchData.employeeCount,
+            branchCodes: selectedBranchCodes,
             maxResults: 2000 // Get maximum results for Excel
         };
 

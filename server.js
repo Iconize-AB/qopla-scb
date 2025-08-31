@@ -101,6 +101,22 @@ app.get('/api/categories', async (req, res) => {
     }
 });
 
+// Get branch codes
+app.get('/api/branch-codes', async (req, res) => {
+    try {
+        const response = await makeApiRequest('/api/ae/kategoriermedkodtabeller');
+        const branchCodes = response.data.find(cat => cat.Id_Kategori_AE === 'Bransch');
+        if (branchCodes) {
+            res.json(branchCodes.VardeLista);
+        } else {
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Error fetching branch codes:', error);
+        res.status(500).json({ error: 'Failed to fetch branch codes' });
+    }
+});
+
 // Get employee count options
 app.get('/api/employee-counts', async (req, res) => {
     try {
@@ -120,13 +136,17 @@ app.get('/api/employee-counts', async (req, res) => {
 // Search for restaurants
 app.post('/api/search-restaurants', async (req, res) => {
     try {
-        const { city, employeeCount, maxResults = 2000 } = req.body;
+        const { city, employeeCount, branchCodes, maxResults = 2000 } = req.body;
+        
+        // Default branch codes if none selected
+        const defaultBranchCodes = ["56100", "56210", "56291", "56292", "56293", "56294", "56299", "56300"];
+        const selectedBranchCodes = branchCodes && branchCodes.length > 0 ? branchCodes : defaultBranchCodes;
         
         const searchQuery = {
             Kategorier: [
                 {
                     Kategori: "Bransch",
-                    Kod: ["56100", "56210", "56291", "56292", "56293", "56294", "56299", "56300"],
+                    Kod: selectedBranchCodes,
                     Branschniva: 3
                 },
                 {
@@ -181,13 +201,17 @@ app.post('/api/search-restaurants', async (req, res) => {
 // Download restaurants to Excel
 app.post('/api/download-excel', async (req, res) => {
     try {
-        const { city, employeeCount, maxResults = 2000 } = req.body;
+        const { city, employeeCount, branchCodes, maxResults = 2000 } = req.body;
+        
+        // Default branch codes if none selected
+        const defaultBranchCodes = ["56100", "56210", "56291", "56292", "56293", "56294", "56299", "56300"];
+        const selectedBranchCodes = branchCodes && branchCodes.length > 0 ? branchCodes : defaultBranchCodes;
         
         const searchQuery = {
             Kategorier: [
                 {
                     Kategori: "Bransch",
-                    Kod: ["56100", "56210", "56291", "56292", "56293", "56294", "56299", "56300"],
+                    Kod: selectedBranchCodes,
                     Branschniva: 3
                 },
                 {

@@ -120,6 +120,21 @@
             color: var(--qopla-light-gray);
         }
         
+        /* Multiple select styling */
+        select[multiple] {
+            min-height: 120px;
+        }
+        
+        select[multiple] option {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        select[multiple] option:checked {
+            background: var(--qopla-green);
+            color: white;
+        }
+        
         .nav-icon {
             width: 16px;
             height: 16px;
@@ -431,7 +446,7 @@
                                 <option value="all">All Cities</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="employeeCount" class="form-label fw-bold">
                                 Employee Count
                             </label>
@@ -439,7 +454,16 @@
                                 <option value="all">All Sizes</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label for="branchCodes" class="form-label fw-bold">
+                                Branch Codes
+                            </label>
+                            <select class="form-select" id="branchCodes" name="branchCodes" multiple>
+                                <option value="all" selected>All Branch Codes</option>
+                            </select>
+                            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple</small>
+                        </div>
+                        <div class="col-md-2">
                             <label for="maxResults" class="form-label fw-bold">
                                 Max Results
                             </label>
@@ -499,6 +523,15 @@
                     </div>
                     <div class="status-indicator">
                         <span id="selectedSize">All</span>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-card-header">
+                        <i class="fas fa-code status-card-icon"></i>
+                        <div class="status-card-title">Branch Codes</div>
+                    </div>
+                    <div class="status-indicator">
+                        <span id="selectedBranchCodes">All</span>
                     </div>
                 </div>
             </div>
